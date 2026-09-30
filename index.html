@@ -157,6 +157,13 @@ input:focus,textarea:focus{outline:none;border-color:var(--lime);box-shadow:0 0 
 .t-foot span{font:400 .78rem/1.3 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--steel)}
 .bars{flex:none;width:110px;height:28px;background:repeating-linear-gradient(90deg,var(--chalk) 0 2px,transparent 2px 5px,var(--chalk) 5px 9px,transparent 9px 11px,var(--chalk) 11px 12px,transparent 12px 17px)}
 .pass-note{margin:0;max-width:52ch;color:var(--steel)}
+.pass-actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.dlbtn{appearance:none;border:0;cursor:pointer;display:inline-flex;align-items:center;gap:12px;background:var(--lime);color:var(--void);font:700 1.05rem/1 var(--ui);letter-spacing:.06em;text-transform:uppercase;padding:16px 24px;clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));transition:transform .15s,opacity .15s}
+.dlbtn:hover{transform:translateY(-2px)}
+.dlbtn:disabled{opacity:.6;cursor:progress;transform:none}
+.passimg{margin:0;display:flex;flex-direction:column;gap:10px;width:100%;max-width:420px}
+.passimg img{display:block;width:100%;height:auto;border:1px solid var(--wire)}
+.passimg figcaption{font:400 .8rem/1.4 var(--mono);color:var(--steel);letter-spacing:.02em}
 .pass-note b{color:var(--chalk)}
 .ghostbtn{appearance:none;background:transparent;border:1px solid var(--wire);color:var(--chalk);font:700 .9rem/1 var(--ui);letter-spacing:.06em;text-transform:uppercase;padding:13px 18px;cursor:pointer}
 .ghostbtn:hover{border-color:var(--lime);color:var(--lime)}
@@ -321,8 +328,13 @@ footer .indic{font:700 .95rem/1 var(--indic);color:var(--lime);text-transform:no
       <div class="t-event"><span>07.10.2026 · Wed</span><span>Report 10:00 AM</span><span>NCEH Auditorium</span></div>
       <div class="t-foot"><div class="bars" aria-hidden="true"></div><span>Show this pass at the venue desk</span></div>
     </div>
-    <p class="pass-note" id="pass-note"><b>Screenshot this pass now.</b> Bring it and your college ID to the auditions.</p>
-    <button type="button" class="ghostbtn" id="again">Register someone else</button>
+    <p class="pass-note" id="pass-note"><b>Save your pass now.</b> Bring it and your college ID to the auditions.</p>
+    <div class="pass-actions">
+      <button type="button" class="dlbtn" id="dl"><span>Download pass</span><span aria-hidden="true">↓</span></button>
+      <button type="button" class="ghostbtn" id="again">Register someone else</button>
+    </div>
+    <p class="status" id="dl-status" aria-live="polite"></p>
+    <figure class="passimg" id="passimg" hidden><img id="passimg-img" alt="Your TechSpark audition pass"><figcaption>If the download didn't start, long-press this image (phone) or right-click it (laptop) and save it.</figcaption></figure>
   </section>
   </main>
 
@@ -475,18 +487,145 @@ footer .indic{font:700 .95rem/1 var(--indic);color:var(--lime);text-transform:no
     }
   });
 
+  let current = null;
   function showPass(p, scroll) {
+    current = p; $('#passimg').hidden = true; $('#dl-status').textContent = '';
     $('#p-id').textContent = p.pass_id; $('#p-name').textContent = p.full_name; $('#p-usn').textContent = p.usn;
     $('#p-ys').textContent = (p.year || '').replace(' Year', '') + ' · ' + (p.semester || '').replace(' Semester', ' sem');
     $('#p-dept').textContent = p.department; $('#p-int').textContent = p.interests;
-    $('#pass-note').innerHTML = (p.dup ? '<b>You had already registered.</b> This is your existing pass. ' : '<b>Screenshot this pass now.</b> ') + 'Bring it and your college ID to the auditions.' + (MODE === 'demo' ? ' (Preview: nothing was sent.)' : '');
+    $('#pass-note').innerHTML = (p.dup ? '<b>You had already registered.</b> This is your existing pass. ' : '<b>Save your pass now.</b> ') + 'Bring it and your college ID to the auditions.' + (MODE === 'demo' ? ' (Preview: nothing was sent.)' : '');
     form.hidden = true; $('#pass').hidden = false;
     if (scroll) $('#pass').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
   }
+  // ---- downloadable pass image ----
+  function wrapLines(g, text, w, max) {
+    const words = String(text || '').split(/\s+/).filter(Boolean), lines = []; let cur = '';
+    for (const wd of words) { const t = cur ? cur + ' ' + wd : wd; if (!cur || g.measureText(t).width <= w) cur = t; else { lines.push(cur); cur = wd; } }
+    if (cur) lines.push(cur);
+    if (!lines.length) return ['-'];
+    if (lines.length > max) { const keep = lines.slice(0, max); let last = keep[max - 1]; while (last && g.measureText(last + '…').width > w) last = last.slice(0, -1); keep[max - 1] = last + '…'; return keep; }
+    return lines;
+  }
+  async function passImage(p) {
+    const W = 1080, H = 1350, out = document.createElement('canvas'); out.width = W; out.height = H;
+    const g = out.getContext('2d');
+    const C = { lime: '#c8ff1a', void: '#0a0a0c', panel: '#111116', chalk: '#f1f1ee', steel: '#9a9aa6', volt: '#3b2cff' };
+    const FD = '"Tektur","Chakra Petch",sans-serif', FU = '"Chakra Petch",system-ui,sans-serif', FM = '"Share Tech Mono",ui-monospace,monospace';
+    try { await Promise.all(['900 84px Tektur', '700 40px "Chakra Petch"', '400 24px "Share Tech Mono"'].map(f => document.fonts.load(f))); } catch (_) {}
+    const ls = v => { if ('letterSpacing' in g) g.letterSpacing = v + 'px'; };
+    const text = (s, x, y, font, color, spacing, align) => { g.font = font; ls(spacing || 0); g.fillStyle = color; g.textAlign = align || 'left'; g.fillText(s, x, y); g.textAlign = 'left'; };
+
+    g.fillStyle = C.void; g.fillRect(0, 0, W, H);
+    g.strokeStyle = 'rgba(241,241,238,.10)'; g.lineWidth = 2;
+    for (let y = 40; y < H - 60; y += 80) for (let x = 40; x < W; x += 80) { g.beginPath(); g.moveTo(x - 6, y); g.lineTo(x + 6, y); g.moveTo(x, y - 6); g.lineTo(x, y + 6); g.stroke(); }
+    text('TECHSPARK // AUDITIONS 2026', 64, 76, '400 22px ' + FM, C.steel, 3);
+    text('INSPIRE · INNOVATE · INTEGRATE', 1016, 76, '400 22px ' + FM, C.steel, 3, 'right');
+
+    const X = 64, Y = 110, CW = 952, CH = 1180, L = X + 48, R = X + CW - 48;
+    g.fillStyle = C.panel; g.fillRect(X, Y, CW, CH);
+
+    // glyph spark
+    g.save(); g.beginPath(); g.rect(X, Y, CW, CH); g.clip();
+    const cell = 18, scx = X + CW - 150, scy = Y + 250, SR = 150, rr = cell * .36;
+    g.fillStyle = g.strokeStyle = C.lime; g.lineWidth = 2.4; g.globalAlpha = .55;
+    for (let y = scy - SR; y <= scy + SR; y += cell) for (let x = scx - SR; x <= scx + SR; x += cell) {
+      const s = Math.pow(Math.abs(x - scx) / SR, .55) + Math.pow(Math.abs(y - scy) / SR, .55); if (s >= 1) continue;
+      const d = 1 - s, f = hash(Math.round(x), Math.round(y), 7);
+      if (d > .3 && f > .5) g.fillRect(x - rr * .85, y - rr * .85, rr * 1.7, rr * 1.7);
+      else if (d > .3) { g.beginPath(); g.arc(x, y, rr * .82, 0, 6.283); g.stroke(); }
+      else if (d > .12) g.strokeRect(x - rr * .78, y - rr * .78, rr * 1.56, rr * 1.56);
+      else { g.beginPath(); g.moveTo(x - rr * .7, y); g.lineTo(x + rr * .7, y); g.moveTo(x, y - rr * .7); g.lineTo(x, y + rr * .7); g.stroke(); }
+    }
+    g.globalAlpha = 1; g.restore();
+
+    // head bar
+    g.fillStyle = C.lime; g.fillRect(X, Y, CW, 92);
+    text('OFFICIAL AUDITION PASS 2026', X + 32, Y + 57, '400 26px ' + FM, C.void, 4);
+    text('TECHSPARK', X + CW - 32, Y + 60, '900 34px ' + FD, C.void, 1, 'right');
+
+    // stamp + id
+    g.save(); g.translate(L, Y + 170); g.rotate(-4 * Math.PI / 180);
+    g.font = '900 84px ' + FD; ls(0); const sw = g.measureText('CONFIRMED').width;
+    g.strokeStyle = C.lime; g.lineWidth = 6; g.strokeRect(0, 0, sw + 48, 112); g.fillStyle = C.lime; g.fillText('CONFIRMED', 24, 86); g.restore();
+    text(p.pass_id, L, Y + 425, '400 92px ' + FM, C.chalk, 6);
+
+    // details
+    const col = (R - L - 32) / 2;
+    const rows = [
+      [['Name', p.full_name, R - L, 2]],
+      [['USN', p.usn, col, 1], ['Year · Sem', (p.year || '').replace(' Year', '') + ' · ' + (p.semester || '').replace(' Semester', ' sem'), col, 1]],
+      [['Department', p.department, R - L, 1]],
+      [['Class', p.interests, R - L, 3]]
+    ];
+    const top = Y + 490, limit = Y + CH - 212; let vs = 40;
+    const layout = draw => {
+      let y = top;
+      for (const row of rows) {
+        let hmax = 0;
+        row.forEach(([lab, val, w, max], i) => {
+          const x = L + i * (col + 32); g.font = '700 ' + vs + 'px ' + FU; ls(0);
+          const lines = wrapLines(g, val, w, max), h = 44 + (lines.length - 1) * vs * 1.2;
+          if (draw) { text(lab.toUpperCase(), x, y, '400 22px ' + FM, C.steel, 4); lines.forEach((ln, k) => text(ln, x, y + 44 + k * vs * 1.2, '700 ' + vs + 'px ' + FU, C.chalk, 0)); }
+          hmax = Math.max(hmax, h);
+        });
+        y += hmax + 44;
+      }
+      return y;
+    };
+    for (const size of [40, 34, 30]) { vs = size; if (layout(false) <= limit) break; }
+    layout(true);
+
+    // event bar
+    const ey = Y + CH - 236, segW = (R - L) / 3;
+    g.fillStyle = C.volt; g.fillRect(X, ey, CW, 112);
+    [['DATE', '07.10.2026 · WED'], ['REPORTING', '10:00 AM'], ['VENUE', 'NCEH AUDITORIUM']].forEach(([k, v], i) => {
+      const x = L + i * segW; text(k, x, ey + 38, '400 18px ' + FM, '#cfc8ff', 4); text(v, x, ey + 82, '700 28px ' + FU, C.chalk, 0);
+    });
+
+    // barcode + desk note
+    const fy = ey + 112; let hb = 0; for (const ch of p.pass_id) hb = (hb * 31 + ch.charCodeAt(0)) | 0;
+    g.fillStyle = C.chalk; let bx = L;
+    for (let k = 0; bx < L + 280; k++) { const w = 2 + Math.floor(hash(k, hb, 3) * 4) * 2; if (k % 2 === 0) g.fillRect(bx, fy + 30, w, 64); bx += w; }
+    text('SHOW THIS PASS AT THE VENUE DESK', L + 312, fy + 56, '400 20px ' + FM, C.steel, 2);
+    text('BRING YOUR COLLEGE ID', L + 312, fy + 88, '400 20px ' + FM, C.steel, 2);
+
+    g.strokeStyle = C.lime; g.lineWidth = 4; g.strokeRect(X + 2, Y + 2, CW - 4, CH - 4);
+    text('© 2026 Techspark Club • Inspire • Innovate • Integrate', W / 2, 1328, '400 20px ' + FM, C.steel, 2, 'center');
+    return out;
+  }
+
+  const dlBtn = $('#dl'), dlStatus = (t, bad) => { const el = $('#dl-status'); el.textContent = t; el.classList.toggle('bad', !!bad); };
+  dlBtn.addEventListener('click', async () => {
+    if (!current) return;
+    const label = dlBtn.firstElementChild; dlBtn.disabled = true; label.textContent = 'Preparing…'; dlStatus('');
+    try {
+      const canvas = await passImage(current);
+      const blob = await new Promise((res, rej) => canvas.toBlob(b => b ? res(b) : rej(new Error('no blob')), 'image/png'));
+      const name = 'TechSpark-Pass-' + current.pass_id + '.png';
+      const touch = window.matchMedia('(pointer: coarse)').matches;
+      if (touch || MODE === 'demo') { $('#passimg-img').src = canvas.toDataURL('image/png'); $('#passimg').hidden = false; }
+      if (touch && typeof File === 'function' && navigator.canShare) {
+        const file = new File([blob], name, { type: 'image/png' });
+        if (navigator.canShare({ files: [file] })) {
+          try { await navigator.share({ files: [file], title: 'TechSpark audition pass' }); dlStatus('Choose "Save Image" to keep your pass in Photos.'); return; }
+          catch (err) { if (err && err.name === 'AbortError') return; }
+        }
+      }
+      const url = URL.createObjectURL(blob), a = document.createElement('a');
+      a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 5000);
+      dlStatus(touch ? 'If nothing downloaded, long-press the image below to save it.' : 'Downloaded ' + name + '.');
+    } catch (err) {
+      dlStatus('Could not create the image. Take a screenshot of your pass instead.', true);
+    } finally {
+      dlBtn.disabled = false; label.textContent = 'Download pass';
+    }
+  });
   $('#again').addEventListener('click', () => {
     try { localStorage.removeItem(STORE); } catch (_) {}
     form.reset(); $$('.cls').forEach(c => c.classList.remove('on')); filterSems(); syncChips(); touched.clear();
     Object.keys(checks).forEach(k => showErr(k)); update();
+    current = null; $('#passimg').hidden = true; $('#dl-status').textContent = '';
     $('#pass').hidden = true; form.hidden = false; form.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
     document.getElementById('full_name').focus({ preventScroll: true });
   });
