@@ -340,7 +340,7 @@ footer .indic{font:700 .95rem/1 var(--indic);color:var(--lime);text-transform:no
      MODE 'sheet'   → Google Apps Script web app (see google-apps-script.gs)
      MODE 'demo'    → nothing is sent (preview only)
   ------------------------------------------------------------------ */
-  const CONFIG = { MODE: 'auto', SHEET_URL: '', FORM_NAME: 'techspark-audition-2026' };
+  const CONFIG = { MODE: 'auto', SHEET_URL: 'https://script.google.com/macros/s/AKfycbx3QNjl9UbGNzT7aPR2hh5BvEOz9JK7ziNqb1pFnXFXEGidYRyAVJGadC--9uxzj2SA/exec', FORM_NAME: 'techspark-audition-2026' };
   const MODE = CONFIG.MODE === 'auto' ? (CONFIG.SHEET_URL ? 'sheet' : 'netlify') : CONFIG.MODE;
   const EVENT = Date.parse('2026-10-07T10:00:00+05:30');
   const STORE = 'ts-audition-pass-2026';

@@ -19,7 +19,7 @@ Registration site and poster kit for the TechSpark audition drive.
 
 Netlify: connect this repo (or drag the folder into Deploys). No build command.
 
-Submissions go to **Netlify Forms** by default: Site → Forms → `techspark-audition-2026`.
+Submissions go straight to the **Google Sheet** (Registrations tab) via `google-apps-script.gs`. Clear `SHEET_URL` in `index.html` to fall back to Netlify Forms.
 Netlify's free plan caps form submissions, so for a big drive switch to the Google Sheet.
 
 ## Google Sheet backend (recommended)
