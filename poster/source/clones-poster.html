@@ -1,0 +1,146 @@
+<title>TechSpark Auditions Poster</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Crimson+Pro:ital,wght@1,500&family=Fraunces:opsz,wght@9..144,900&family=JetBrains+Mono:wght@400;700&display=swap">
+<style>
+/* Layout: one 4:5 print poster. Newsprint top, headline + censor bar, crowd of clones at the base, one red figure. Single committed look (B&W + signal red). */
+:root{
+  --paper:#e9e7e2; --ink:#111110; --grey:#6d6b66; --rule:#b9b6ae; --red:#d8231f; --page:#1a1a19;
+  --display:"Anton","Oswald","Impact",sans-serif;
+  --quote:"Crimson Pro",Georgia,serif;
+  --heavy:"Fraunces",Georgia,serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  color-scheme:dark;
+}
+html,body{background:var(--page);color:var(--ink)}
+body{padding-inline:16px;padding-block:24px;display:flex;justify-content:center}
+.poster{
+  container-type:inline-size;position:relative;width:100%;max-width:560px;aspect-ratio:4/5;
+  background:var(--paper);overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5);
+}
+.poster canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.layer{position:absolute;inset:0}
+.mast{position:absolute;left:4.5cqw;right:4.5cqw;top:3.5cqw;display:flex;justify-content:space-between;
+  font:700 2.1cqw/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;border-bottom:.25cqw solid var(--ink);padding-bottom:1.6cqw}
+.mast2{position:absolute;left:4.5cqw;right:4.5cqw;top:9cqw;display:flex;justify-content:space-between;
+  font:400 1.7cqw/1 var(--mono);letter-spacing:.1em;color:var(--grey);text-transform:uppercase}
+h1{position:absolute;left:4.5cqw;right:4.5cqw;top:13cqw;margin:0;font:400 13.8cqw/.88 var(--display);text-transform:uppercase;letter-spacing:-.005em}
+h1 .l2{display:block;position:relative;width:max-content}
+h1 .bar{position:absolute;left:-2cqw;right:-2cqw;top:40%;height:26%;background:var(--red);mix-blend-mode:multiply;transform:rotate(-1.2deg)}
+.bar-tag{position:absolute;right:4.5cqw;top:27.5cqw;font:700 1.8cqw/1.3 var(--mono);text-align:right;letter-spacing:.08em;text-transform:uppercase}
+.bar-tag s{color:var(--grey)}
+.bar-tag b{color:var(--red)}
+.quote{position:absolute;left:0;right:0;top:54cqw;text-align:center;font:italic 500 4.6cqw/1.1 var(--quote)}
+.quote small{display:block;margin-top:1.4cqw;font:700 1.7cqw/1 var(--mono);letter-spacing:.2em;text-transform:uppercase}
+.side-l{position:absolute;left:4.5cqw;top:53cqw;font:400 1.55cqw/1.45 var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--grey)}
+.side-r{position:absolute;right:4.5cqw;top:53cqw;font:400 1.55cqw/1.45 var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--grey);text-align:right}
+.side-l b,.side-r b{color:var(--ink)}
+.arrow{position:absolute;font:700 1.9cqw/1.2 var(--mono);color:var(--red);letter-spacing:.08em;text-transform:uppercase}
+.foot{position:absolute;left:0;right:0;bottom:0;background:var(--ink);color:var(--paper);padding:3.4cqw 4.5cqw 3cqw;display:grid;grid-template-columns:1fr auto;gap:2.6cqw;align-items:end}
+.foot .hindi{font:900 6.2cqw/.95 var(--heavy);letter-spacing:-.02em;margin:0 0 2.2cqw}
+.foot .hindi em{font-style:normal;color:var(--red)}
+.roles{display:flex;flex-wrap:wrap;gap:1cqw 1.2cqw;font:700 1.75cqw/1 var(--mono);text-transform:uppercase;letter-spacing:.08em}
+.roles span{border:.2cqw solid #5a5955;padding:.9cqw 1.3cqw}
+.cta{text-align:right}
+.cta .open{display:inline-block;background:var(--red);color:#fff;font:400 5.2cqw/1 var(--display);padding:1.4cqw 2.2cqw;text-transform:uppercase;letter-spacing:.02em}
+.cta p{margin:1.6cqw 0 0;font:400 1.6cqw/1.5 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:#bdbab3}
+.cta p b{color:var(--paper)}
+.note{position:fixed;left:0;right:0;bottom:0}
+</style>
+
+<div class="poster" id="poster">
+  <canvas id="c" aria-hidden="true"></canvas>
+  <div class="layer">
+    <div class="mast"><span>TechSpark Dispatch</span><span>Auditions</span></div>
+    <div class="mast2"><span>Issue 01 · Oct 2026</span><span>Navkis College of Engineering</span></div>
+
+    <h1>Everyone<br>clones.<span class="l2">We commit.<i class="bar"></i></span></h1>
+
+    <div class="bar-tag"><s>$ git clone crowd</s><br><b>$ git commit -m "me"</b></div>
+
+    <div class="side-l">// ident_scan.log<br>copies found: <b>487</b><br>originals: <b>01</b><br>status: <b>searching</b></div>
+    <div class="side-r">nothing here<br>is a template<br><b>// 404_ordinary</b><br><b>_not_found</b></div>
+
+    <div class="quote">Stay rare. Most are just copies.<small>Be the red one</small></div>
+
+    <div class="foot">
+      <div>
+        <p class="hindi">bheed mein <em>mat</em> kho.</p>
+        <div class="roles"><span>Dev</span><span>Design</span><span>AI / ML</span><span>Content</span><span>Media</span><span>Events</span></div>
+      </div>
+      <div class="cta">
+        <span class="open">Auditions Open</span>
+        <p><b>07 Oct 2026 · 10 AM</b><br>Venue: <b>NCEH Auditorium</b><br>Register → <b>link in bio</b><br>1st &amp; 2nd years welcome</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const poster=document.getElementById('poster'), cv=document.getElementById('c'), ctx=cv.getContext('2d');
+  function rng(seed){return function(){seed=(seed*16807)%2147483647;return (seed-1)/2147483646}}
+  function figure(x,y,s,col,rim,facing){
+    // y = shoulder line; s = head radius
+    ctx.fillStyle=col;
+    // coat
+    ctx.beginPath();
+    const sw=s*2.9, h=s*7;
+    ctx.moveTo(x-sw*.55,y+s*.3);
+    ctx.quadraticCurveTo(x-sw*.62,y-s*.35,x-s*.5,y-s*.55);
+    ctx.lineTo(x+s*.5,y-s*.55);
+    ctx.quadraticCurveTo(x+sw*.62,y-s*.35,x+sw*.55,y+s*.3);
+    ctx.lineTo(x+sw*.6,y+h);ctx.lineTo(x-sw*.6,y+h);ctx.closePath();ctx.fill();
+    // neck + head
+    ctx.fillRect(x-s*.42,y-s*1.2,s*.84,s*.9);
+    ctx.beginPath();ctx.ellipse(x,y-s*1.75,s*.82,s,0,0,Math.PI*2);ctx.fill();
+    // rim light (collar edge) for depth
+    if(rim){ctx.strokeStyle=rim;ctx.lineWidth=Math.max(1,s*.12);
+      ctx.beginPath();ctx.moveTo(x-s*.5,y-s*.5);ctx.quadraticCurveTo(x-sw*.6,y-s*.3,x-sw*.55,y+s*.6);ctx.stroke();}
+    if(facing){ // collar V for the one facing us
+      ctx.fillStyle='rgba(0,0,0,.25)';ctx.beginPath();ctx.moveTo(x-s*.45,y-s*.5);ctx.lineTo(x,y+s*1.4);ctx.lineTo(x+s*.45,y-s*.5);ctx.closePath();ctx.fill();}
+  }
+  function draw(){
+    const dpr=Math.min(window.devicePixelRatio||1,3), W=poster.clientWidth, H=poster.clientHeight;
+    cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.fillStyle='#e9e7e2';ctx.fillRect(0,0,W,H);
+    // faint newsprint columns in the upper area
+    const r=rng(7);
+    ctx.fillStyle='rgba(17,17,16,.07)';
+    for(let col=0;col<3;col++){const cx=W*.045+col*W*.31;
+      for(let ln=0;ln<9;ln++){const w=W*.27*(.55+r()*.45);ctx.fillRect(cx,W*.66+ln*W*.012,w,W*.004);}}
+    // crowd
+    const rows=9, top=H*.58, bottom=H*.83, rr=rng(42);
+    let redDrawn=false;
+    for(let i=0;i<rows;i++){
+      const t=i/(rows-1), y=top+(bottom-top)*Math.pow(t,1.15), s=W*(.0085+.021*t);
+      const gap=s*3.1, n=Math.ceil(W/gap)+2, off=(i%2)*gap*.5-gap;
+      const shade=Math.round(95-70*t);
+      for(let k=0;k<n;k++){
+        const x=off+k*gap+(rr()-.5)*gap*.35, yy=y+(rr()-.5)*s*.6, ss=s*(.92+rr()*.16);
+        const v=shade+Math.round((rr()-.5)*22);
+        if(!redDrawn && i===5 && Math.abs(x-W*.5)<gap*.6){
+          figure(x,yy,ss*1.12,'#d8231f','#ff6a5c',true);redDrawn=true;continue;}
+        figure(x,yy,ss,`rgb(${v},${v},${v-2})`,`rgba(255,255,255,${.06+.1*(1-t)})`,false);
+      }
+    }
+    // halftone dot screen over everything
+    const g=Math.max(2.4,W/190);
+    ctx.fillStyle='rgba(233,231,226,.22)';
+    for(let y=0;y<H;y+=g){for(let x=(y/g)%2?g/2:0;x<W;x+=g){ctx.fillRect(x,y,g*.42,g*.42);}}
+    // paper grain
+    const gr=rng(99);ctx.fillStyle='rgba(17,17,16,.05)';
+    for(let i=0;i<W*H/60;i++){ctx.fillRect(gr()*W,gr()*H,1,1);}
+    // crosshair marker on the red figure's row
+    ctx.strokeStyle='#d8231f';ctx.lineWidth=Math.max(1,W/400);
+    const my=top+(bottom-top)*Math.pow(5/8,1.15)-W*.06;
+    ctx.beginPath();ctx.arc(W*.5,my,W*.045,0,Math.PI*2);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(W*.5-W*.065,my);ctx.lineTo(W*.5-W*.025,my);ctx.moveTo(W*.5+W*.025,my);ctx.lineTo(W*.5+W*.065,my);
+    ctx.moveTo(W*.5,my-W*.065);ctx.lineTo(W*.5,my-W*.025);ctx.stroke();
+    ctx.fillStyle='#d8231f';ctx.font=`700 ${W*.017}px "JetBrains Mono",monospace`;ctx.textAlign='left';
+    ctx.fillText('ORIGINAL_DETECTED',W*.5+W*.07,my+W*.006);
+  }
+  draw();
+  let t;window.addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(draw,120)});
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(draw);
+})();
+</script>

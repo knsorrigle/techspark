@@ -1,0 +1,223 @@
+<title>TechSpark Jack In</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=Noto+Sans+Devanagari:wght@700&family=Noto+Sans+Kannada:wght@700&family=Share+Tech+Mono&family=Tektur:wght@700;900&display=swap">
+<style>
+/* Layout: 4:5 poster. Lime spine (vertical wordmark) + lime footer form an L frame; black stage with a spark built from glyphs; blue transmission band; class-select row. Single committed dark look. */
+:root{
+  --void:#0a0a0c; --lime:#c8ff1a; --volt:#3b2cff; --violet:#7b5cff; --chalk:#f1f1ee; --steel:#6b6b76; --wire:#34343d; --page:#050506;
+  --display:"Tektur","Chakra Petch","Arial Narrow",sans-serif;
+  --sub:"Chakra Petch","Rajdhani",system-ui,sans-serif;
+  --mono:"Share Tech Mono",ui-monospace,Menlo,monospace;
+  --indic:"Noto Sans Kannada","Noto Sans Devanagari",sans-serif;
+  color-scheme:dark;
+}
+html,body{background:var(--page);color:var(--chalk)}
+body{padding-inline:16px;padding-block:24px;display:flex;justify-content:center}
+.poster{container-type:inline-size;position:relative;width:100%;max-width:560px;aspect-ratio:4/5;background:var(--void);overflow:hidden;isolation:isolate;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.poster canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+/* spine */
+.spine{position:absolute;left:0;top:0;width:15cqw;height:105cqw;background:var(--lime);color:var(--void);display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding-block:3cqw 2.4cqw;box-sizing:border-box}
+.spine .mark{width:6.4cqw;height:6.4cqw;fill:var(--void)}
+.spine .word{writing-mode:vertical-rl;transform:rotate(180deg);font:900 10.4cqw/1 var(--display);letter-spacing:.02em;text-transform:uppercase;white-space:nowrap}
+.spine .word .inv{background:var(--void);color:var(--lime);padding-inline:1.2cqw}
+.indic{display:flex;flex-direction:column;align-items:center;gap:.6cqw;text-align:center}
+.indic b{font:700 4cqw/1.1 var(--indic)}
+.indic span{font:700 2.4cqw/1.1 var(--indic)}
+.indic i{font:400 1.45cqw/1 var(--mono);font-style:normal;letter-spacing:.12em;text-transform:uppercase}
+
+/* stage type */
+.hud{position:absolute;left:19cqw;right:4cqw;top:2.6cqw;display:flex;justify-content:space-between;font:400 1.5cqw/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--steel)}
+.head{position:absolute;left:18.5cqw;top:8.4cqw;margin:0;font:900 22cqw/.84 var(--display);text-transform:uppercase;letter-spacing:-.01em;color:var(--chalk);mix-blend-mode:difference}
+.head.ghost{color:var(--lime);mix-blend-mode:normal;clip-path:inset(21% 0 67% 0);transform:translateX(2.2cqw)}
+.cur{display:inline-block;width:.34em;height:.62em;margin-left:.08em;background:var(--lime);animation:blink 1.1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.tag{position:absolute;left:19.5cqw;top:48.6cqw;display:flex;flex-direction:column;gap:1cqw}
+.tag b{font:700 3.2cqw/1 var(--sub);text-transform:uppercase;letter-spacing:.02em}
+.tag span{font:400 1.7cqw/1 var(--mono);color:var(--lime);letter-spacing:.08em;text-transform:uppercase}
+.term{position:absolute;left:19.5cqw;top:57.5cqw;margin:0;font:400 1.75cqw/1.55 var(--mono);color:var(--lime);letter-spacing:.04em}
+.term .dim{color:var(--steel)}
+.sig{position:absolute;left:85.5cqw;top:19.5cqw;font:400 1.45cqw/1.35 var(--mono);color:var(--void);letter-spacing:.06em;text-transform:uppercase}
+.sticker{position:absolute;left:71cqw;top:63cqw;transform:rotate(-5deg);background:var(--void);color:var(--lime);border:.3cqw solid var(--lime);font:700 2.1cqw/1 var(--sub);padding:1cqw 1.4cqw;letter-spacing:.02em}
+
+/* band */
+.band{position:absolute;left:12cqw;right:0;top:72cqw;height:12.6cqw;background:var(--volt);padding:1.8cqw 4cqw 0 5cqw;box-sizing:border-box;overflow:hidden;display:flex;flex-direction:column;gap:.7cqw}
+.band p{margin:0}
+.band .big{font:700 4.6cqw/1 var(--sub);text-transform:uppercase;letter-spacing:.01em;color:var(--chalk)}
+.band .small{font:400 1.6cqw/1.25 var(--mono);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;color:var(--chalk)}
+.band .echo{color:var(--lime);opacity:.5;transform:translateX(-22cqw)}
+
+/* class select */
+.classes{position:absolute;left:19cqw;right:4cqw;top:87.4cqw}
+.lbl{display:flex;justify-content:space-between;font:400 1.5cqw/1 var(--mono);letter-spacing:.1em;text-transform:uppercase}
+.lbl span:first-child{color:var(--lime)}
+.lbl span:last-child{color:var(--steel)}
+.classes ul{list-style:none;margin:1.4cqw 0 0;padding:0;display:grid;grid-template-columns:repeat(6,1fr);gap:1cqw}
+.classes li{border:.2cqw solid var(--wire);background:var(--void);padding:1.2cqw 1cqw;display:flex;flex-direction:column;gap:1.1cqw;font:700 1.8cqw/1 var(--sub);text-transform:uppercase;letter-spacing:.04em;color:var(--chalk);transition:background .15s,color .15s,border-color .15s}
+.classes li svg{width:2.6cqw;height:2.6cqw;color:var(--lime);fill:none;stroke:currentColor;stroke-width:1.3}
+.classes li svg .f{fill:currentColor;stroke:none}
+.classes li.on{background:var(--lime);border-color:var(--lime);color:var(--void)}
+.classes li.on svg{color:var(--void)}
+
+/* footer */
+.foot{position:absolute;left:0;right:0;bottom:0;height:20cqw;background:var(--lime);color:var(--void);padding:2.2cqw 4cqw 0;box-sizing:border-box;display:flex;flex-direction:column;gap:1.7cqw}
+.row1{display:flex;align-items:flex-end;gap:2.6cqw}
+.date{font:900 11cqw/.8 var(--display);letter-spacing:-.01em}
+.dstack{display:flex;flex-direction:column;gap:.5cqw;font:700 2.5cqw/1 var(--sub);text-transform:uppercase}
+.dstack span{font:400 1.8cqw/1 var(--mono)}
+.sep{width:.3cqw;align-self:stretch;background:var(--void)}
+.blk{display:flex;flex-direction:column;gap:.6cqw}
+.blk .k{font:400 1.4cqw/1 var(--mono);letter-spacing:.14em;text-transform:uppercase}
+.blk b{font:700 4.2cqw/.9 var(--sub);text-transform:uppercase}
+.blk em{font:700 2cqw/1 var(--sub);font-style:normal;text-transform:uppercase;letter-spacing:.06em}
+.row2{display:flex;align-items:center;gap:2cqw}
+.bars{flex:none;width:17cqw;height:2.8cqw;background:repeating-linear-gradient(90deg,var(--void) 0 .25cqw,transparent .25cqw .55cqw,var(--void) .55cqw 1.1cqw,transparent 1.1cqw 1.3cqw,var(--void) 1.3cqw 1.45cqw,transparent 1.45cqw 2.1cqw)}
+.row2 span{flex:1;min-width:0;font:400 1.45cqw/1.3 var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.dots{display:flex;gap:.5cqw;flex:none}
+.dots i{width:2.2cqw;height:2.2cqw;border-radius:50%;background:var(--void)}
+.dots i:first-child{background:transparent;box-shadow:inset 0 0 0 .3cqw var(--void)}
+
+@media (prefers-reduced-motion:reduce){.cur{animation:none}.classes li{transition:none}}
+</style>
+
+<div class="poster" id="poster">
+  <canvas id="c" aria-hidden="true"></canvas>
+
+  <aside class="spine">
+    <svg class="mark" viewBox="0 0 9 9" aria-hidden="true"><path d="M4 0h1v9H4zM0 4h9v1H0zM3 3h1v1H3zM5 3h1v1H5zM3 5h1v1H3zM5 5h1v1H5z"/></svg>
+    <div class="word"><span>Tech</span><span class="inv">Spark</span></div>
+    <div class="indic"><b lang="kn">ಕಿಡಿ</b><span lang="hi">चिंगारी</span><i>= spark</i></div>
+  </aside>
+
+  <div class="hud"><span>Poster no.02 // recruit_protocol</span><span>shell: junior · slots: limited</span></div>
+
+  <h1 class="head">Jack<br>in<span class="cur"></span></h1>
+  <div class="head ghost" aria-hidden="true">Jack<br>in</div>
+
+  <div class="tag"><b>Auditions are live.</b><span>// recruiting new sparks</span></div>
+  <pre class="term">&gt; ./audition --club techspark
+<span class="dim">&gt; scan sparks [#####--] 71%</span>
+&gt; status: [ OPEN ]</pre>
+
+  <div class="sig">[ spark_id 0x07 ]<br>signal: strong</div>
+  <div class="sticker">spark hai? toh aaja.</div>
+
+  <section class="band">
+    <p class="big">The campus runs on code.</p>
+    <p class="small">So will you. Build it, break it, ship it. No experience needed, just the spark.</p>
+    <p class="small echo" aria-hidden="true">Just the spark. So will you. Build it, break it, ship it. No experience needed, just the spark.</p>
+  </section>
+
+  <section class="classes">
+    <div class="lbl"><span>Select your class ›››</span><span>6 domains · pick one or more</span></div>
+    <ul id="cls">
+      <li class="on"><svg viewBox="0 0 10 10" aria-hidden="true"><rect x="1.5" y="1.5" width="7" height="7"/></svg>Dev</li>
+      <li><svg viewBox="0 0 10 10" aria-hidden="true"><circle cx="5" cy="5" r="3.6"/><circle class="f" cx="5" cy="5" r="1.2"/></svg>Design</li>
+      <li><svg viewBox="0 0 10 10" aria-hidden="true"><rect class="f" x="1" y="1" width="3" height="3"/><rect class="f" x="6" y="1" width="3" height="3"/><rect class="f" x="1" y="6" width="3" height="3"/><rect class="f" x="6" y="6" width="3" height="3"/></svg>AI / ML</li>
+      <li><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M5 1.5v7M1.5 5h7"/></svg>Content</li>
+      <li><svg viewBox="0 0 10 10" aria-hidden="true"><circle cx="5" cy="5" r="3.6"/><circle cx="5" cy="5" r="1.8"/></svg>Media</li>
+      <li><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M2 2l6 6M8 2l-6 6"/></svg>Events</li>
+    </ul>
+  </section>
+
+  <footer class="foot">
+    <div class="row1">
+      <div class="date">07.10</div>
+      <div class="dstack"><b>Wed</b><span>2026</span></div>
+      <div class="sep"></div>
+      <div class="blk"><span class="k">Time</span><b>10:00 AM</b></div>
+      <div class="sep"></div>
+      <div class="blk"><span class="k">Venue</span><b>NCEH</b><em>Auditorium</em></div>
+    </div>
+    <div class="row2">
+      <div class="bars" aria-hidden="true"></div>
+      <span>Audition no.01 · register → link in bio · open to all juniors</span>
+      <div class="dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+    </div>
+  </footer>
+</div>
+
+<script>
+(function(){
+  const P=document.getElementById('poster'), cv=document.getElementById('c'), ctx=cv.getContext('2d');
+  const LIME='#c8ff1a', VIOLET='#7b5cff', VOLT='#3b2cff';
+  function hash(x,y,s){let h=(x*374761393+y*668265263+s*1442695041)|0;h=Math.imul(h^(h>>>13),1274126177);return ((h^(h>>>16))>>>0)/4294967295}
+  function vnoise(x,y,s){const xi=Math.floor(x),yi=Math.floor(y),xf=x-xi,yf=y-yi,u=xf*xf*(3-2*xf),v=yf*yf*(3-2*yf);
+    const a=hash(xi,yi,s),b=hash(xi+1,yi,s),c=hash(xi,yi+1,s),d=hash(xi+1,yi+1,s);return a+(b-a)*u+(c-a)*v+(a-b-c+d)*u*v}
+  function glyph(t,x,y,c){
+    const r=c*.36, lw=Math.max(1,c*.13); ctx.lineWidth=lw;
+    switch(t){
+      case 0: ctx.fillRect(x-lw/2,y-lw/2,lw,lw);break;
+      case 1: ctx.beginPath();ctx.moveTo(x-r*.7,y);ctx.lineTo(x+r*.7,y);ctx.moveTo(x,y-r*.7);ctx.lineTo(x,y+r*.7);ctx.stroke();break;
+      case 2: ctx.beginPath();ctx.moveTo(x-r*.72,y-r*.72);ctx.lineTo(x+r*.72,y+r*.72);ctx.moveTo(x+r*.72,y-r*.72);ctx.lineTo(x-r*.72,y+r*.72);ctx.stroke();break;
+      case 3: ctx.strokeRect(x-r*.78,y-r*.78,r*1.56,r*1.56);break;
+      case 4: ctx.beginPath();ctx.arc(x,y,r*.82,0,6.283);ctx.stroke();ctx.beginPath();ctx.arc(x,y,r*.28,0,6.283);ctx.fill();break;
+      case 5: {const q=r*.62;ctx.fillRect(x-r*.85,y-r*.85,q,q);ctx.fillRect(x+r*.85-q,y-r*.85,q,q);ctx.fillRect(x-r*.85,y+r*.85-q,q,q);ctx.fillRect(x+r*.85-q,y+r*.85-q,q,q);break;}
+      case 6: ctx.fillRect(x-r*.85,y-r*.85,r*1.7,r*1.7);break;
+    }
+  }
+  function draw(){
+    const dpr=Math.min(window.devicePixelRatio||1,3), W=P.clientWidth, H=P.clientHeight, u=W/100;
+    cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr); ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.fillStyle='#0a0a0c'; ctx.fillRect(0,0,W,H);
+
+    // HUD plus grid
+    ctx.strokeStyle='rgba(241,241,238,.13)'; ctx.lineWidth=1;
+    for(let y=6*u;y<104*u;y+=8*u)for(let x=19*u;x<100*u;x+=8*u){ctx.beginPath();ctx.moveTo(x-.6*u,y);ctx.lineTo(x+.6*u,y);ctx.moveTo(x,y-.6*u);ctx.lineTo(x,y+.6*u);ctx.stroke();}
+
+    // violet halftone disc, upper right
+    const hx=88*u, hy=22*u, hr=18*u, hs=1.4*u; ctx.fillStyle=VIOLET; ctx.globalAlpha=.55;
+    for(let y=hy-hr;y<hy+hr;y+=hs)for(let x=hx-hr;x<hx+hr;x+=hs){const d=Math.hypot(x-hx,y-hy)/hr;if(d<1){const rr=hs*.5*(1-d*.9);ctx.beginPath();ctx.arc(x,y,rr,0,6.283);ctx.fill();}}
+    ctx.globalAlpha=1;
+
+    // lime blocks
+    ctx.fillStyle=LIME; ctx.fillRect(84*u,12*u,16*u,15*u);
+    ctx.fillStyle=VIOLET; ctx.fillRect(78*u,29.5*u,6*u,2*u);
+    ctx.fillStyle=LIME; ctx.fillRect(19.5*u,54.6*u,9*u,.5*u);
+
+    // glyph field with the spark made of glyphs
+    const c=2.1*u, stars=[[69,55,24],[90,43,5]];
+    for(let y=6*u+c/2;y<84*u;y+=c){ for(let x=15*u+c/2;x<W;x+=c){
+      const i=Math.round(x/c), j=Math.round(y/c); let s=9;
+      for(const [sx,sy,sr] of stars){const dx=Math.abs(x-sx*u)/(sr*u), dy=Math.abs(y-sy*u)/(sr*u); const v=Math.pow(dx,.55)+Math.pow(dy,.55); if(v<s)s=v;}
+      const block=vnoise(Math.floor(i/3)*.38,Math.floor(j/3)*.38,3), fine=hash(i,j,11);
+      let t=-1, a=1;
+      const clear=(x<59*u&&y>45.5*u&&y<71*u);
+      if(s<1){const d=1-s; t=d>.3?[4,6,5,6,4,3][Math.floor(fine*6)]:d>.12?[4,3,2][Math.floor(fine*3)]:(fine>.3?1:0);}
+      else if(clear){t=-1;}
+      else if(s<1.22){t=fine>.55?0:-1;a=.7;}
+      else if(block>.68){t=[1,2,0,3,1][Math.floor(fine*5)];a=.42;}
+      else if(block>.6){t=fine>.4?[0,1][Math.floor(fine*2)]:-1;a=.3;}
+      else if(fine>.94){t=0;a=.35;}
+      if(t<0)continue;
+      ctx.globalAlpha=a; ctx.fillStyle=ctx.strokeStyle=LIME; glyph(t,x,y,c);
+    }}
+    ctx.globalAlpha=1;
+
+    // HUD bracket at the spark's top-right corner
+    ctx.strokeStyle=LIME; ctx.lineWidth=Math.max(1,.3*u);
+    ctx.beginPath(); ctx.moveTo(92*u,33*u); ctx.lineTo(96*u,33*u); ctx.lineTo(96*u,37*u); ctx.stroke();
+
+    // glitch slices
+    ctx.setTransform(1,0,0,1,0,0);
+    for(const [gy,gh,gs] of [[21,1.6,-3],[40,.9,4],[61.5,2,-2.5],[80,1.2,3]]){
+      const sy=Math.round(gy*u*dpr), sh=Math.round(gh*u*dpr), sx=Math.round(15*u*dpr);
+      ctx.drawImage(cv,sx,sy,cv.width-sx,sh,sx+Math.round(gs*u*dpr),sy,cv.width-sx,sh);
+    }
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.fillStyle=VOLT; ctx.fillRect(15*u,35.2*u,W,.35*u); ctx.fillRect(40*u,68.4*u,W,.3*u);
+
+    // print grain
+    ctx.fillStyle='rgba(241,241,238,.05)';
+    for(let k=0;k<W*H/70;k++){ctx.fillRect(hash(k,1,5)*W,hash(k,2,5)*H,1,1);}
+  }
+  draw();
+  let t; window.addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(draw,120)});
+
+  // class select cycles like a game menu
+  const items=[...document.querySelectorAll('#cls li')];
+  if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    let k=0; setInterval(()=>{items[k].classList.remove('on');k=(k+1)%items.length;items[k].classList.add('on');},1400);
+  }
+})();
+</script>
